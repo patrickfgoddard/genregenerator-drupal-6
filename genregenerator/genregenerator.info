@@ -1,0 +1,4 @@
+; $Id$
+name = Genre Generator
+description = Create a random music genre description
+core = 6.x

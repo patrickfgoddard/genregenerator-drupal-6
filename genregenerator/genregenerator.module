@@ -1,0 +1,157 @@
+<?php
+// $Id$
+/**
+ * @file genregenerator.module
+ * This module provides a block and page displaying a randomly generated music genre.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function genregenerator_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#genregenerator':
+      return t('Add the block anywhere on your site, or create a menu item to "genre" to view full page');
+  }
+}
+
+
+/**
+ * Implementation of hook_menu().
+ */
+function genregenerator_menu() { 
+  $items['genre'] = array(
+    'title' => 'Your Band\'s Genre Is:',
+    'page callback' => 'genregenerator_page',
+    'access arguments' => array('access content'),
+  );
+  $items['genregenerator.json'] = array(
+    'title' => 'Genregenerator AJAX Gateway',
+    'page callback' => 'genregenerator_item',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+ 
+  return $items;
+}
+
+
+/**
+ * Implementation of hook_block().
+ */
+function genregenerator_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      $blocks[0]['info'] = t('Random Genre Generator');
+      return $blocks;
+
+    case 'view':
+      $content = _genregenerator_get_genre();
+      $block['subject'] = t('Genre');
+      $block['content'] = check_plain($content);
+
+      return $block;
+  }    
+}
+
+
+/**
+ * Implementation of hook_theme().
+ */
+function genregenerator_theme($existing, $type, $theme, $path) {
+  return array(
+    'genregenerator_genre' => array(
+      'arguments' => array('genre' => NULL),
+    ),
+     'page' =>  array(
+      'template' => 'page-genre',
+      'arguments' => array(
+        'content' => NULL,
+        'show_blocks' => TRUE,
+        'show_messages' => TRUE,
+      ),
+    ),
+  );
+}
+
+/**
+ * Theme function for theming hooks
+ * 
+ * @param $text
+ *   The quote content, as a string.
+ *
+ * @param $origin
+ *   The original source of the quote, as a string.
+ * @return
+ *   An HTML themed string.
+ *  
+ */
+
+function theme_genregenerator_genre($genre) {
+  $module_path = drupal_get_path('module', 'genregenerator');
+  drupal_add_css($module_path . '/genregenerator.css');
+  drupal_add_js($module_path . '/genregenerator.js');
+  $opts = array('absolute' => TRUE);
+  $json_url = url('genregenerator.json', $opts);
+  drupal_add_js(
+    array('genregenerator' =>
+      array("json_url" => $json_url)), 'setting');
+  $output = '<div id="genregenerator-genre"><p>' . $genre . '</p></div>';
+  return $output;
+}
+
+
+/**
+ * 
+ * Returns a randomly generated genre
+ */
+
+function _genregenerator_get_genre() {
+  $output = '';
+  
+  // get the adjectives
+  $descriptorSql = 'select name from {genre_descriptors} order by rand() limit 4';
+  $res = db_query($descriptorSql);
+  
+  while ($r = db_fetch_array($res)) {
+    $output .= $r['name'] . ' ';
+  }
+   
+  // get the adjectives
+  $toplevelSql = 'select name from {genre_toplevel} order by rand() limit 1';
+  $res2 = db_query($toplevelSql);
+  
+  while ($r = db_fetch_array($res2)) {
+    $output .= trim($r['name']) . ' ';
+  }
+  $output = check_plain($output);
+    
+  return $output;
+}
+
+/**
+ * 
+ * Page wrapper
+ * 
+ */
+
+function genregenerator_page() {
+  $randomgenre = _genregenerator_get_genre();
+  $output = '';
+  $output = theme('genregenerator_genre',check_plain($randomgenre));
+  // $output = '<div id="genregenerator-genre"><p>' . _genregenerator_get_genre() . '</p></div>';
+  return $output;
+}
+
+/**
+ * TO DO: add description
+ * 
+ */
+function genregenerator_item() {
+  $item = _genregenerator_get_genre();
+  drupal_set_header('Content-Type: text/plain; charset: utf-8');
+  printf(
+    '{ "genre": "%s"}',
+    $item
+  );
+}

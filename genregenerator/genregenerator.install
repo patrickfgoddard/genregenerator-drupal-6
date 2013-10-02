@@ -1,0 +1,62 @@
+<?php
+// $Id$
+/**
+ * @file genregenerator.install
+ * TODO: Enter file description here.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function genregenerator_schema() {
+ $schema['genre_toplevel'] = array(
+    'fields' => array(
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 127,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('name'),
+  );
+  $schema['genre_descriptors'] = array(
+    'fields' => array(
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 127,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('name'),
+  );
+  return $schema;
+}
+
+
+/**
+ * Implementation of hook_install().
+ */
+function genregenerator_install() {
+  drupal_install_schema('genregenerator');
+  
+  $system_path = dirname(__FILE__); 
+  // drupal_set_message($system_path);
+  $toplevel_file = $system_path . '/genres-toplevel.txt';
+  $descriptor_file = $system_path . '/genres-descriptor.txt';
+  $query_desc = 'LOAD DATA LOCAL INFILE "%s" into table {genre_descriptors} lines terminated by ","';
+  $query_toplevel = 'LOAD DATA LOCAL INFILE "%s" into table {genre_toplevel} lines terminated by ","';
+  db_query($query_desc, $descriptor_file);
+  db_query($query_toplevel, $toplevel_file);
+}
+
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function genregenerator_uninstall() {
+  drupal_uninstall_schema('genregenerator');
+  
+}
+

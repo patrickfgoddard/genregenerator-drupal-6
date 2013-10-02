@@ -1,0 +1,63 @@
+
+
+/* general tags */
+
+html {
+  
+}
+body {
+  background: #eee;
+  font: 1em Verdana, Helvetica, Arial, sans-serif;
+  height: 100%;
+  text-align: center;
+}
+#wrapper {
+  background: #fff;
+  margin: 0 auto;
+  padding: 2em;
+  text-align: left;
+  width: 900px;
+}
+
+#genregenerator-genre p {
+  text-transform: capitalize;
+  font-size: 2em;
+}
+#regenerate-genre {
+  color: #333;
+  cursor: pointer;
+  border: 1px solid;
+  border-color:  #ccc #ccc #999 #999;
+  border-radius: 10px;
+  -moz-border-radius: .5em;
+  -webkit-border-radius: .5em;
+  background: #ccc;
+  background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
+  background: -moz-linear-gradient(top,  #eee,  #ccc);
+  display: block;
+  font-weight: bold;
+  padding: 5px 10px;
+  text-align: center;
+  text-shadow: #eee 1px 2px 1px;
+  width: 5em;
+}
+#regenerate-genre:hover {
+  background: #eee;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee));
+  background: -moz-linear-gradient(top,  #ccc,  #eee);
+  text-decoration: none;
+}
+
+#themer-fixeder, #themer-toggle {display:none}
+
+/* social */
+
+#genre-tweet, #facebook-like {
+  float: left;
+  margin: 1em;
+  width: auto;
+}
+
+.clear {
+  clear:both;
+}
