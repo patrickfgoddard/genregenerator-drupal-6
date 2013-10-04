@@ -2,7 +2,7 @@
 // $Id$
 /**
  * @file genregenerator.install
- * TODO: Enter file description here.
+ * Install necessary tables and data for genregenerator module
  */
 
 /**
@@ -40,15 +40,14 @@ function genregenerator_schema() {
  */
 function genregenerator_install() {
   drupal_install_schema('genregenerator');
+  ';';
   
-  $system_path = dirname(__FILE__); 
-  // drupal_set_message($system_path);
-  $toplevel_file = $system_path . '/genres-toplevel.txt';
-  $descriptor_file = $system_path . '/genres-descriptor.txt';
-  $query_desc = 'LOAD DATA LOCAL INFILE "%s" into table {genre_descriptors} lines terminated by ","';
-  $query_toplevel = 'LOAD DATA LOCAL INFILE "%s" into table {genre_toplevel} lines terminated by ","';
-  db_query($query_desc, $descriptor_file);
-  db_query($query_toplevel, $toplevel_file);
+  $query_desc = 'insert into {genre_descriptors} (name) values ("transgender"),("afro"),("down-tempo"),("gamewave"),("gamelan"),("death"),("black"),("pagan"),("gothic"),("alternative"),("funk"),("progressive"),("drone"),("crust"),("free-form"),("industrial"),("nu"),("sludge"),("garage"),("goa"),("grime"),("horror"),("indie"),("irish"),("jam"),("fusion"),("Jawaiian"),("jig"),("jug"),("k-pop"),("kubuki"),("kiwi"),("kinky"),("Kwaito"),("latin"),("lo-fi"),("light"),("lounge"),("Louisiana"),("memphis"),("detroit"),("west coast"),("east coast"),("down tempo"),("Luk grunge"),("mambo"),("mandarin"),("marimba"),("math"),("medieval"),("melodic"),("pop-punk"),("noise"),("Merengue"),("mexican"),("post"),("miami"),("Minstrel"),("minimalist"),("modern"),("motown"),("nardcore"),("nashville"),("neo"),("new age"),("no age"),("house"),("romantic"),("old time"),("oldies"),("obscuro"),("avante garde"),("operatic"),("organic"),("outlaw"),("parody"),("peace"),("piano"),("poco-poco"),("porno"),("power"),("Psychedelic"),("psych"),("raga"),("ragtime"),("Reggae"),("retro"),("roots"),("sad"),("slow"),("uptempo"),("sacred"),("saya"),("country"),("western"),("shock"),("scum"),("smooth"),("yacht rock"),("slack-key"),("soft"),("southern"),("spiritual"),("space"),("stoner"),("desert"),("surf"),("swamp"),("symphonic"),("synth"),("technoid"),("thrash"),("texas"),("teen"),("tibetan"),("traditional"),("trip-hop"),("twee"),("two-tone"),("urban"),("underground"),("viking"),("world"),("hard"),("street")';
+  
+  $query_toplevel = 'insert into {genre_toplevel} (name) values ("rock"),("metal"),("folk"),("blues"),("jazz"),("pop"),("hip hop"),("core"),("psychobilly"),("techno"),("polka"),("trance"),("funk"),("rock en espanol"),("rumba"),("gospel"),("salsa"),("samba"),("screamo"),("country"),("shoegaze"),("ska"),("speedcore"),("soul"),("tango"),("tumba"),("waltz"),("zydeco")';
+
+  db_query($query_desc);
+  db_query($query_toplevel);
 }
 
 
